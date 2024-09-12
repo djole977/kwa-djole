@@ -24,7 +24,7 @@ namespace KWA_Djole.Business.Services
         {
             HomeDto homeDto = new HomeDto();
             homeDto.ShoppingItems = await GetShoppingItems();
-
+            homeDto.TotalItems = await GetCustomerCartCount(user);
 
             return homeDto;
         }
@@ -42,8 +42,11 @@ namespace KWA_Djole.Business.Services
         }
         public async Task<CustomerCartDto> GetCustomerCart(string user)
         {
-            //return _mapper.Map<CustomerCartDto>(await _db.);
-            throw new NotImplementedException();
+            return _mapper.Map<CustomerCartDto>(await _db.CustomerCarts.Include(x => x.Item).Where(x => x.UserId == user).ToListAsync());
+        }
+        public async Task<int> GetCustomerCartCount(string user)
+        {
+            return await _db.CustomerCarts.Where(x => x.UserId == user).CountAsync();
         }
     }
 }

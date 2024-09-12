@@ -1,4 +1,5 @@
 ﻿using KWA_Djole.Business.Dtos;
+using KWA_Djole.Business.Interfaces;
 using KWA_Djole.Data.Models;
 using KWA_Djole.Models;
 using Microsoft.AspNetCore.Identity;
@@ -12,18 +13,20 @@ namespace KWA_Djole.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly IShoppingService _shoppingService;
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IShoppingService shoppingService)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _shoppingService = shoppingService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var user = User?.Identity?.Name;
-            return View();
+            var homeData = await _shoppingService.GetHomeData(user);
+            return View(homeData);
         }
 
         public IActionResult Login()

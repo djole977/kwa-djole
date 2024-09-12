@@ -14,5 +14,6 @@ namespace KWA_Djole.Business.Interfaces
         Task<List<ShoppingItemDto>> GetShoppingItems();
         Task DeleteShoppingItem(int id);
         Task<CustomerCartDto> GetCustomerCart(string user);
+        Task<int> GetCustomerCartCount(string user);
     }
 }

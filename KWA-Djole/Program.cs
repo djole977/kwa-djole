@@ -1,3 +1,5 @@
+using KWA_Djole.Business.Interfaces;
+using KWA_Djole.Business.Services;
 using KWA_Djole.Data;
 using KWA_Djole.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +24,8 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IShoppingService, ShoppingService>();
 
 var app = builder.Build();
 

@@ -1,12 +1,12 @@
-﻿@{
+﻿@model KWA_Djole.Business.Dtos.HomeDto
+@{
     ViewData["Title"] = "Home Page";
 }
-@model KWA_Djole.Business.Dtos.HomeDto
 
 <div class="display-4">Dobrodošli</div>
-<div class="col-12 d-flex flex-row">
-@foreach (var item in Model.ShoppingItems)
+<div class="col-12 d-flex flex-row gap-4">
+    @foreach (var item in Model.ShoppingItems)
     {
-        @Html.PartialAsync("_ShoppingItem", item)
+        @await Html.PartialAsync("_ShoppingItem", item)
     }
 </div>
