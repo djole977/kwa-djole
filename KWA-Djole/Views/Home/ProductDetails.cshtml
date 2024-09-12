@@ -4,7 +4,7 @@
 </div>
 <div class="w-100 d-flex flex-row justify-content-between align-items-center">
     @await Html.PartialAsync("_ShoppingItem", Model)
-    @* <table id="reviewsTable" class="col-12">
+    <table id="reviewsTable" class="col-12">
         <thead>
             <tr>
                 <th></th>
@@ -21,7 +21,7 @@
                         <div class="d-flex justify-content-center">
                             @for (int i = 1; i < 6; i++)
                             {
-                                <span class="fa fa-star @(review.Grade >= i ? "checked" : "")"></span>
+                                <span class="fa fa-star @(review.Rating >= i ? "checked" : "")"></span>
                             }
                         </div>
                         <div class="d-flex justify-content-center mb-4 mt-2">
@@ -31,5 +31,5 @@
                 </tr>
             }
         </tbody>
-    </table> *@
+    </table>
 </div>
