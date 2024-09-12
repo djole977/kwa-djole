@@ -2,11 +2,11 @@
 <html lang="en">
     <head>
         <title>Prodaja karata - Uloguj se</title>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/lib/adminlte/css/adminlte.min.css" />
         <link rel="stylesheet" href="~/lib/jquery-confirm/jquery-confirm.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/lib/datatables/css/datatables.min.css" />
         <link rel="stylesheet" href="~/lib/toastr/css/toastr.min.css" />
         <link rel="stylesheet" href="~/lib/fullcalendar/css/main.css" />
         <link rel="stylesheet" href="~/lib/daterangepicker/css/daterangepicker.css" />
@@ -14,7 +14,7 @@
     </head>
     <body class="login-page" style="min-height: 500px">
         @RenderBody()
-
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
         @await RenderSectionAsync("Scripts", required: false)

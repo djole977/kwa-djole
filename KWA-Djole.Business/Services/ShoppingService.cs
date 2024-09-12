@@ -2,6 +2,7 @@
 using KWA_Djole.Business.Dtos;
 using KWA_Djole.Business.Interfaces;
 using KWA_Djole.Data;
+using KWA_Djole.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace KWA_Djole.Business.Services
         }
         public async Task<ShoppingItemDto> GetShoppingItem(int id)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<ShoppingItemDto>(await _db.ShoppingItems.FirstOrDefaultAsync(x => x.Id == id));
         }
         public async Task<List<ShoppingItemDto>> GetShoppingItems()
         {
@@ -47,6 +48,17 @@ namespace KWA_Djole.Business.Services
         public async Task<int> GetCustomerCartCount(string user)
         {
             return await _db.CustomerCarts.Where(x => x.UserId == user).CountAsync();
+        }
+        public async Task<bool> AddShoppingItemToCart(string user, int itemId)
+        {
+            CustomerCart customerCart = new CustomerCart
+            {
+                UserId = user,
+                Item = await _db.ShoppingItems.FirstOrDefaultAsync(x => x.Id == itemId)
+            };
+            _db.CustomerCarts.Add(customerCart);
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }

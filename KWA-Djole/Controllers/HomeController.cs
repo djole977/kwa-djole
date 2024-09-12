@@ -96,5 +96,12 @@ namespace KWA_Djole.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public async Task<IActionResult> ProductDetails(int id)
+        {
+            var product = await _shoppingService.GetShoppingItem(id);
+            product.IsDetailsPage = true;
+            return View(product);
+        }
     }
 }

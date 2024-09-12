@@ -11,5 +11,6 @@ namespace KWA_Djole.Data.Models
         public string? UserId { get; set; }
         public ShoppingItem ShoppingItem { get; set; }
         public int ShoppingItemId { get; set; }
+        public int Rating { get; set; }
     }
 }

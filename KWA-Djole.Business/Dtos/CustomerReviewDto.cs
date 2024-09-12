@@ -12,5 +12,6 @@ namespace KWA_Djole.Business.Dtos
         public string? UserId { get; set; }
         public ShoppingItemDto ShoppingItem { get; set; }
         public int ShoppingItemId { get; set; }
+        public int Rating { get; set; }
     }
 }

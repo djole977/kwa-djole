@@ -1,10 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using KWA_Djole.Data.Models
 @inject UserManager<User> UserManager
+@inject KWA_Djole.Business.Interfaces.IShoppingService shoppingService
 @{
     var user = await UserManager.GetUserAsync(User);
     var isAuth = User.Identity.IsAuthenticated;
+    var cartItems = 0;
     System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo("en-GB");
+    if (isAuth)
+    {
+        cartItems = await shoppingService.GetCustomerCartCount(user.Id);
+    }
 }
 
 <!DOCTYPE html>
@@ -34,29 +40,12 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <i class="fas fa-cart-shopping"></i>
-                        <span class='badge badge-warning' id='lblCartCount'> 5 </span>
+                        <i class="fas fa-cart-shopping" @(isAuth ? "onclick=GoToCart(" + User.Identity.Name + ")" : "onclick=GoToLogin()")></i>
+                        @if(cartItems > 0)
+                        {
+                            <span class='badge badge-warning' id='lblCartCount'> @cartItems </span>
+                        }
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                        <i class="fas fa-search"></i>
-                    </a>
-                    <div class="navbar-search-block">
-                        <form class="form-inline">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-navbar" type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -72,22 +61,6 @@
             </a>
             <!-- Sidebar -->
             <div class="sidebar">
-
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <!--img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"-->
-                    </div>
-                    <div class="info">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a href="#" class="d-block">@user.Email</a>
-                        }
-                        else
-                        {
-                            <a href="#" class="d-block">Uloguj se</a>
-                        }
-                    </div>
-                </div>
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
@@ -168,7 +141,6 @@
     <script src="~/lib/daterangepicker/js/daterangepicker.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/error-messages-rs.js"></script>
     <script src="~/lib/select2/js/select2.min.js"></script>
 
 

@@ -10,3 +10,10 @@
         @await Html.PartialAsync("_ShoppingItem", item)
     }
 </div>
+@section Scripts{
+    <script type="text/javascript">
+        function GoToProductDetails(id) {
+            window.location.href = "/Home/ProductDetails/" + id;
+        }
+    </script>
+}
