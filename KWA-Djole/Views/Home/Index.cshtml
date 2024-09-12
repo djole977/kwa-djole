@@ -1,10 +1,21 @@
 ﻿@model KWA_Djole.Business.Dtos.HomeDto
+@using KWA_Djole.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Home Page";
+    var isAuth = User.Identity.IsAuthenticated;
 }
-
-<div class="display-4">Dobrodošli</div>
-<div class="col-12 d-flex flex-row gap-4">
+@if (isAuth)
+{
+    var user = await UserManager.GetUserAsync(User);
+    <div class="display-4">Dobrodošao/la @user.FirstName</div>
+}
+else
+{
+    <div class="display-4">Dobrodošli</div>
+}
+<div class="col-12 d-flex flex-row gap-4" id="comicsDiv">
     @foreach (var item in Model.ShoppingItems)
     {
         @await Html.PartialAsync("_ShoppingItem", item)

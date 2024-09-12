@@ -31,11 +31,11 @@ namespace KWA_Djole.Business.Services
         }
         public async Task<ShoppingItemDto> GetShoppingItem(int id)
         {
-            return _mapper.Map<ShoppingItemDto>(await _db.ShoppingItems.FirstOrDefaultAsync(x => x.Id == id));
+            return _mapper.Map<ShoppingItemDto>(await _db.ShoppingItems.Include(x => x.ShoppingItemGenre).FirstOrDefaultAsync(x => x.Id == id));
         }
         public async Task<List<ShoppingItemDto>> GetShoppingItems()
         {
-            return _mapper.Map<List<ShoppingItemDto>>(await _db.ShoppingItems.ToListAsync());
+            return _mapper.Map<List<ShoppingItemDto>>(await _db.ShoppingItems.Include(x => x.ShoppingItemGenre).ToListAsync());
         }
         public async Task DeleteShoppingItem(int id)
         {
@@ -43,7 +43,7 @@ namespace KWA_Djole.Business.Services
         }
         public async Task<CustomerCartDto> GetCustomerCart(string user)
         {
-            return _mapper.Map<CustomerCartDto>(await _db.CustomerCarts.Include(x => x.Item).Where(x => x.UserId == user).ToListAsync());
+            return _mapper.Map<CustomerCartDto>(await _db.CustomerCarts.Include(x => x.Item).ThenInclude(x => x.ShoppingItemGenre).Where(x => x.UserId == user).ToListAsync());
         }
         public async Task<int> GetCustomerCartCount(string user)
         {
@@ -57,6 +57,25 @@ namespace KWA_Djole.Business.Services
                 Item = await _db.ShoppingItems.FirstOrDefaultAsync(x => x.Id == itemId)
             };
             _db.CustomerCarts.Add(customerCart);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+        public async Task<List<ShoppingItemGenreDto>> GetAllGenres()
+        {
+            return _mapper.Map<List<ShoppingItemGenreDto>>(await _db.ShoppingItemGenres.ToListAsync());
+        }
+        public async Task<bool> AddUserGenres(string user, List<int> genreIds)
+        {
+            List<UserGenres> customerGenres = new List<UserGenres>();
+            foreach (var genreId in genreIds)
+            {
+                customerGenres.Add(new UserGenres
+                {
+                    UserId = user,
+                    GenreId = genreId
+                });
+            }
+            _db.UserGenres.AddRange(customerGenres);
             await _db.SaveChangesAsync();
             return true;
         }

@@ -16,5 +16,7 @@ namespace KWA_Djole.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<CustomerCart> CustomerCarts { get; set; }
+        public DbSet<ShoppingItemGenre> ShoppingItemGenres { get; set; }
+        public DbSet<UserGenres> UserGenres { get; set; }
     }
 }

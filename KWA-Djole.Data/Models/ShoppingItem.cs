@@ -16,5 +16,7 @@ namespace KWA_Djole.Data.Models
         public float Price { get; set; }
         public List<CustomerReview>? CustomerReviews { get; set; }
         public string? ImageUrl { get; set; }
+        public ShoppingItemGenre ShoppingItemGenre { get; set; }
+        public int ShoppingItemGenreId { get; set; }
     }
 }

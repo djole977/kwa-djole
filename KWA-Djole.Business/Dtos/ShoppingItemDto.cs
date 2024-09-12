@@ -18,5 +18,7 @@ namespace KWA_Djole.Business.Dtos
         public List<CustomerReviewDto>? CustomerReviews { get; set; }
         public string? ImageUrl { get; set; }
         public bool IsDetailsPage { get; set; } = false;
+        public ShoppingItemGenreDto ShoppingItemGenre { get; set; }
+        public int ShoppingItemGenreId { get; set; }
     }
 }

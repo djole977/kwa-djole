@@ -33,3 +33,16 @@
         </tbody>
     </table>
 </div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#reviewsTable').DataTable({
+                'bFilter': false,
+                'iDisplayLength': 3,
+                'info': false,
+                'dom': 'rtip'
+            })
+            $('#reviewsTable thead').remove()
+        })
+    </script>
+}

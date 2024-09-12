@@ -1,43 +1,42 @@
-﻿@{
-    Layout = "../Shared/_LayoutLogin.cshtml";
-}
+﻿<div class="col-12 d-flex justify-content-center" style="margin-top: 100px">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html"><b>Đole </b>Prodaja Stripova</a>
+        </div>
 
-<div class="login-box">
-    <div class="login-logo">
-        <a href="../../index2.html"><b>Đole </b>Prodaja Stripova</a>
-    </div>
-
-    <div class="card">
-        <div class="card-body login-card-body">
-            <p class="login-box-msg">Uloguj se u aplikaciju</p>
-            <form id="loginForm" asp-action="Authenticate" asp-controller="Home" method="post">
-                <div class="input-group mb-3">
-                    <input name="Email" type="email" class="form-control" placeholder="Email" required>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Uloguj se u aplikaciju</p>
+                <form id="loginForm" asp-action="Authenticate" asp-controller="Home" method="post">
+                    <div class="input-group mb-3">
+                        <input name="Email" type="email" class="form-control" placeholder="Email" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="input-group mb-3">
-                    <input name="Password" type="password" class="form-control" placeholder="Šifra" required>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
+                    <div class="input-group mb-3">
+                        <input name="Password" type="password" class="form-control" placeholder="Šifra" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-8">
+                    <div class="row">
+                        <div class="col-8">
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Prijavi se</button>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block">Prijavi se</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function() {

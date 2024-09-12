@@ -1,4 +1,5 @@
-﻿using KWA_Djole.Business.Dtos;
+﻿using AutoMapper;
+using KWA_Djole.Business.Dtos;
 using KWA_Djole.Business.Interfaces;
 using KWA_Djole.Data.Models;
 using KWA_Djole.Models;
@@ -14,12 +15,14 @@ namespace KWA_Djole.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IShoppingService _shoppingService;
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IShoppingService shoppingService)
+        private readonly IMapper _mapper;
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IShoppingService shoppingService, IMapper mapper)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _shoppingService = shoppingService;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -71,6 +74,14 @@ namespace KWA_Djole.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            RegisterDto model = new RegisterDto();
+            model.Genres = await _shoppingService.GetAllGenres();
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto model)
         {
@@ -93,6 +104,11 @@ namespace KWA_Djole.Controllers
                 TempData["Success"] = "False";
                 TempData["Message"] = "Greška prilikom registracije";
                 return Json(new { success = false });
+            }
+            if (model.SelectedGenres != null)
+            {
+                var genres = model.SelectedGenres.Select(x => x.Id).ToList();
+                await _shoppingService.AddUserGenres(user.Id, genres);
             }
             return RedirectToAction("Index", "Home");
         }

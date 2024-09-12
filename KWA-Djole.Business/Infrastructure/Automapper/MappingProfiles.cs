@@ -18,6 +18,8 @@ namespace KWA_Djole.Business.Infrastructure.Automapper
             CreateMap<OrderItem, OrderItemDto>().ReverseMap();
             CreateMap<CustomerReview, CustomerReviewDto>().ReverseMap();
             CreateMap<ShoppingItem, ShoppingItemDto>().ReverseMap();
+            CreateMap<ShoppingItemGenre, ShoppingItemGenreDto>().ReverseMap();
+            CreateMap<UserGenres, UserGenresDto>().ReverseMap();
         }
     }
 }

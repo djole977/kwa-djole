@@ -18,5 +18,7 @@ namespace KWA_Djole.Business.Dtos
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
+        public List<ShoppingItemGenreDto> Genres { get; set; }
+        public List<ShoppingItemGenreDto>? SelectedGenres { get; set; }
     }
 }

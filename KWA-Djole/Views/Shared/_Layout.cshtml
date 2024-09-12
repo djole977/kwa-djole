@@ -71,42 +71,52 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a asp-controller="Home" asp-action="ListaZgrada" class="nav-link">
-                                <i class="nav-icon fas fa-basket-shopping"></i>
-                                <p>
-                                    Moje porudžbine
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="Finansije" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>
-                                    Profil
-                                </p>
-                            </a>
-                        </li>
+                        @if(isAuth){
+                            <li class="nav-item">
+                                <a asp-controller="Home" asp-action="ListaZgrada" class="nav-link">
+                                    <i class="nav-icon fas fa-basket-shopping"></i>
+                                    <p>
+                                        Moje porudžbine
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="User" asp-action="Profile" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        Profil
+                                    </p>
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <hr />
                         </li>
-                        <li class="nav-item">
-                            @if (isAuth)
-                            {
-                                <a href="@Url.Action("Logout", "Account")" class="nav-link">
+                        @if (isAuth)
+                        {
+                            <li class="nav-item">
+                                <a href="#" onclick="Logout()" class="nav-link">
                                     <i class="nav-icon far fa-circle text-danger"></i>
                                     <p class="text">Odjavi se</p>
                                 </a>
-                            }
-                            else
-                            {
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
                                 <a href="@Url.Action("Login", "Home")" class="nav-link">
-                                    <i class="nav-icon fas fa-right-to-bracket"></i>
+                                    <i class="nav-icon fas fa-user"></i>
                                     <p class="text">Prijavi se</p>
                                 </a>
-                            }
-
-                        </li>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Register", "Home")" class="nav-link">
+                                    <i class="nav-icon fas fa-address-card"></i>
+                                    <p class="text">Registruj se</p>
+                                </a>
+                            </li>
+                        }
+                        
 
                     </ul>
                 </nav>
@@ -142,8 +152,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/select2/js/select2.min.js"></script>
-
-
+    <script src="~/lib/jquery-validation/dist/messages_sr_lat.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

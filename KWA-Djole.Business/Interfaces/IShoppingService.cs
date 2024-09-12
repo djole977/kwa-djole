@@ -16,5 +16,7 @@ namespace KWA_Djole.Business.Interfaces
         Task<CustomerCartDto> GetCustomerCart(string user);
         Task<int> GetCustomerCartCount(string user);
         Task<bool> AddShoppingItemToCart(string user, int itemId);
+        Task<List<ShoppingItemGenreDto>> GetAllGenres();
+        Task<bool> AddUserGenres(string user, List<int> genreIds);
     }
 }
