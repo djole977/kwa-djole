@@ -23,6 +23,11 @@ $(document).ready(function () {
         localStorage.setItem('success', null);
         localStorage.setItem('message', null);
     }
+    //Bootstrap code - initialize all tooltips on the page
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
 })
 function GoToLogin() {
     window.location.href = "/Home/Login";
@@ -80,7 +85,7 @@ function ErrorToast(title, text) {
         title = 'Obaveštenje'
     }
     if (text === undefined) {
-        text = 'Akcija uspešno izvršena'
+        text = 'Došlo je do greške'
     }
 
     toastr.options = {

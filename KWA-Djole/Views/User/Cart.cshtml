@@ -1,0 +1,113 @@
+﻿@model KWA_Djole.Business.Dtos.CustomerCartDto
+@using System.Globalization
+@{
+    var groupedItems = Model.Items
+    .GroupBy(i => new { i.Id, i.Name, i.Price })
+    .Select(g => new
+    {
+        Id = g.Key.Id,
+        Name = g.Key.Name,
+        Price = g.Key.Price,
+        Quantity = g.Count(),
+        TotalPrice = g.Key.Price * g.Count()
+    })
+    .ToList();
+}
+<div class="display-4 mb-2">
+    Korpa
+</div>
+@if(groupedItems.Count == 0)
+{
+    <div class="display-4 text-center">Korpa je prazna</div>
+}
+else
+{
+    <div class="card col-md-8">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Proizvod</th>
+                        <th>Cena</th>
+                        <th>Količina</th>
+                        <th>Ukupno</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in groupedItems)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Price.ToString("N", CultureInfo.InvariantCulture) RSD</td>
+                            <td>
+                                <a class="mr-2 text-black" href="#" onclick="RemoveItemFromCart(@item.Id)">- </a> @item.Quantity <a class="ml-2 text-black" href="#" onclick="AddProductToCart(@item.Id)"> +</a>
+                            </td>
+                            <td>@item.TotalPrice.ToString("N", CultureInfo.InvariantCulture) RSD</td>
+                            <td>
+                                <a href="#" class="fas fa-trash text-black" onclick="RemoveItemFromCart(@item.Id)"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-success mt-3" style="width: 150px" onclick="OrderItems()">Naruči</button>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts{
+    <script type="text/javascript">
+        function RemoveItemFromCart(itemId) {
+            $.ajax({
+                url: '/User/RemoveItemFromCart',
+                type: 'POST',
+                data: { id: itemId },
+                success: function (data) {
+                    if (data.success === true) {
+                        localStorage.setItem('success', 'true')
+                        localStorage.setItem('message', 'Proizvod je uklonjen iz korpe')
+                        window.location.reload();
+                    }
+                    else{
+                        ErrorToast()
+                    }
+                }
+            });
+        }
+        function AddProductToCart(productId) {
+            $.ajax({
+                url: "/User/AddProductToCart",
+                type: "POST",
+                data: { productId: productId },
+                success: function (data) {
+                    if (data.success === true) {
+                        localStorage.setItem('success', 'true')
+                        localStorage.setItem('message', 'Proizvod je dodat u korpu')
+                        window.location.reload();
+                    }
+                    else {
+                        ErrorToast('Greška', data.message);
+                    }
+                }
+            });
+        }
+        function OrderItems() {
+            $.ajax({
+                url: '/User/OrderItems',
+                type: 'POST',
+                success: function (data) {
+                    if (data.success === true) {
+                        localStorage.setItem('success', 'true')
+                        localStorage.setItem('message', 'Uspešno ste naručili proizvode')
+                        window.location.reload();
+                    }
+                    else {
+                        ErrorToast('Greška', data.message);
+                    }
+                }
+            });
+        }
+    </script>
+}

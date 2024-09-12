@@ -1,0 +1,99 @@
+﻿@model List<KWA_Djole.Business.Dtos.OrderDto>
+@using System.Globalization
+<div class="display-4 mb-2">
+    Narudžbine
+</div>
+@if (Model.Count == 0)
+{
+    <div class="display-4 text-center">Nemate nijednu narudžbinu</div>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        var groupedItems = order.Items
+        .GroupBy(i => new { i.ShoppingItem.Id, i.ShoppingItem.Name, i.ShoppingItem.Price, i.Status, i.IsRatedByCustomer })
+        .Select(g => new
+        {
+            Id = g.Key.Id,
+            Name = g.Key.Name,
+            Price = g.Key.Price,
+            Quantity = g.Count(),
+            TotalPrice = g.Key.Price * g.Count(),
+            Status = g.Key.Status,
+            IsRatedByCustomer = g.Key.IsRatedByCustomer
+        })
+        .ToList();
+        <div class="card col-md-6">
+            <div class="card-body">
+                <h4>Datum porudžbine - @order.Date.ToString("dd.MM.yyyy u HH:mm") sati</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Ime stavke</th>
+                            <th>Količina</th>
+                            <th>Ukupno</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in groupedItems)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.TotalPrice.ToString("N", CultureInfo.InvariantCulture) RSD</td>
+                                <td>
+                                    @if (item.Status == KWA_Djole.Data.Enums.OrderStatus.Pristiglo)
+                                    {
+                                        <span class="badge bg-success">Pristiglo</span>
+                                    }
+                                    else if (item.Status == KWA_Djole.Data.Enums.OrderStatus.U_toku)
+                                    {
+                                        <span class="badge bg-primary">Poslato</span>
+                                    }
+                                    else if (item.Status == KWA_Djole.Data.Enums.OrderStatus.Otkazano)
+                                    {
+                                        <span class="badge bg-warning">Otkazano</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Otkazano</span>
+                                    }
+                                    @if(item.Status == KWA_Djole.Data.Enums.OrderStatus.Pristiglo && !item.IsRatedByCustomer)
+                                    {
+                                        <a href="#" class="fas fa-star ml-2 text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Oceni" onclick="ShowRateModal(@item.Id)"></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        function ShowRateModal(itemId) {
+            $('#exampleModal').modal('show');
+        }
+    </script>
+}

@@ -2,14 +2,17 @@
 @using KWA_Djole.Data.Models
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<User> UserManager
+@inject KWA_Djole.Business.Interfaces.IShoppingService shoppingService
 @{
     ViewData["Title"] = "Home Page";
     var isAuth = User.Identity.IsAuthenticated;
+    var cartItems = 0;
 }
 @if (isAuth)
 {
     var user = await UserManager.GetUserAsync(User);
     <div class="display-4">Dobrodošao/la @user.FirstName</div>
+    cartItems = await shoppingService.GetCustomerCartCount(user.Id);
 }
 else
 {
@@ -21,10 +24,28 @@ else
         @await Html.PartialAsync("_ShoppingItem", item)
     }
 </div>
+<input type="hidden" value="@cartItems" id="cartItemCount" />
 @section Scripts{
     <script type="text/javascript">
         function GoToProductDetails(id) {
             window.location.href = "/Home/ProductDetails/" + id;
+        }
+        function AddProductToCart(productId) {
+            $.ajax({
+                url: "/User/AddProductToCart",
+                type: "POST",
+                data: { productId: productId },
+                success: function (data) {
+                    if (data.success) {
+                        localStorage.setItem('success', 'true')
+                        localStorage.setItem('message', 'Proizvod je dodat u korpu')
+                        window.location.reload();
+                    }
+                    else {
+                        ErrorToast('Greška', data.message);
+                    }
+                }
+            });
         }
     </script>
 }

@@ -1,4 +1,5 @@
-﻿using KWA_Djole.Data.Models;
+﻿using KWA_Djole.Data.Enums;
+using KWA_Djole.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace KWA_Djole.Business.Dtos
         public int OrderId { get; set; }
         public ShoppingItemDto? ShoppingItem { get; set; }
         public int ShoppingItemId { get; set; }
+        public OrderStatus Status { get; set; }
+        public bool IsRatedByCustomer { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using KWA_Djole.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KWA_Djole.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240912203442_M13")]
+    partial class M13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,21 +57,16 @@ namespace KWA_Djole.Data.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ShoppingItemId")
+                    b.Property<int>("ShoppingItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
 
                     b.HasIndex("ShoppingItemId");
 
@@ -431,21 +428,17 @@ namespace KWA_Djole.Data.Migrations
 
             modelBuilder.Entity("KWA_Djole.Data.Models.CustomerReview", b =>
                 {
-                    b.HasOne("KWA_Djole.Data.Models.OrderItem", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
+                    b.HasOne("KWA_Djole.Data.Models.ShoppingItem", "ShoppingItem")
+                        .WithMany("CustomerReviews")
+                        .HasForeignKey("ShoppingItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("KWA_Djole.Data.Models.ShoppingItem", null)
-                        .WithMany("CustomerReviews")
-                        .HasForeignKey("ShoppingItemId");
 
                     b.HasOne("KWA_Djole.Data.Models.User", null)
                         .WithMany("Reviews")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Item");
+                    b.Navigation("ShoppingItem");
                 });
 
             modelBuilder.Entity("KWA_Djole.Data.Models.Order", b =>

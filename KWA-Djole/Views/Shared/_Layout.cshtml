@@ -39,8 +39,8 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-cart-shopping" @(isAuth ? "onclick=GoToCart(" + User.Identity.Name + ")" : "onclick=GoToLogin()")></i>
+                    <a class="nav-link" href="@(isAuth ? "/User/Cart" : "#")">
+                        <i class="fas fa-cart-shopping"></i>
                         @if(cartItems > 0)
                         {
                             <span class='badge badge-warning' id='lblCartCount'> @cartItems </span>
@@ -73,7 +73,7 @@
                         </li>
                         @if(isAuth){
                             <li class="nav-item">
-                                <a asp-controller="Home" asp-action="ListaZgrada" class="nav-link">
+                                <a asp-controller="User" asp-action="Orders" class="nav-link">
                                     <i class="nav-icon fas fa-basket-shopping"></i>
                                     <p>
                                         Moje porudžbine

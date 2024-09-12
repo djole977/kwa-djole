@@ -11,5 +11,6 @@ namespace KWA_Djole.Business.Dtos
     {
         public string UserId { get; set; }
         public List<OrderItemDto> Items { get; set; }
+        public DateTime Date { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace KWA_Djole.Data.Models
     {
         public string UserId { get; set; }
         public ShoppingItem? Item { get; set; }
+        public int ItemId { get; set; }
     }
 }
