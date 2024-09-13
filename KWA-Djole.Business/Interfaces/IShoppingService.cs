@@ -23,5 +23,6 @@ namespace KWA_Djole.Business.Interfaces
         Task<bool> OrderItems(string user);
         Task<List<OrderDto>> GetCustomerOrders(string user);
         Task<bool> RateOrderItem(string user, int orderItemId, int rating, string comment);
+        Task<List<ShoppingItemDto>> GetShoppingItemsFiltered(FilterDto filter);
     }
 }

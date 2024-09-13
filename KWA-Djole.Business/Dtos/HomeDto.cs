@@ -10,5 +10,6 @@ namespace KWA_Djole.Business.Dtos
     {
         public List<ShoppingItemDto>? ShoppingItems { get; set; }
         public int TotalItems { get; set; }
+        public List<ShoppingItemGenreDto>? Genres { get; set; }
     }
 }

@@ -112,12 +112,41 @@ namespace KWA_Djole.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
         [HttpGet]
         public async Task<IActionResult> ProductDetails(int id)
         {
             var product = await _shoppingService.GetShoppingItem(id);
             product.IsDetailsPage = true;
             return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllItemsFiltered(FilterDto filters)
+        {
+            var items = await _shoppingService.GetShoppingItems();
+            return Json(items);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetShoppingItemsFiltered(FilterDto filter)
+        {
+            try
+            {
+                var items = await _shoppingService.GetShoppingItemsFiltered(filter);
+                return Json(items);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetItemPartial(int id)
+        {
+            var item = await _shoppingService.GetShoppingItem(id);
+            return PartialView("_ShoppingItem", item);
         }
     }
 }

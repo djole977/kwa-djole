@@ -9,6 +9,5 @@ namespace KWA_Djole.Business.Dtos
     public class ShoppingItemGenreDto : BaseDto
     {
         public string Name { get; set; }
-        public List<ShoppingItemDto> ShoppingItems { get; set; }
     }
 }

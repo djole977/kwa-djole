@@ -27,6 +27,7 @@ namespace KWA_Djole.Business.Services
             HomeDto homeDto = new HomeDto();
             homeDto.ShoppingItems = await GetShoppingItems();
             homeDto.TotalItems = await GetCustomerCartCount(user);
+            homeDto.Genres = await GetAllGenres();
 
             return homeDto;
         }
@@ -171,6 +172,27 @@ namespace KWA_Djole.Business.Services
             {
                 return false;
             }
+        }
+        public async Task<List<ShoppingItemDto>> GetShoppingItemsFiltered(FilterDto filter)
+        {
+            var items = _db.ShoppingItems.Include(x => x.ShoppingItemGenre).AsQueryable();
+            if (!string.IsNullOrEmpty(filter.Name))
+            {
+                items = items.Where(x => x.Name.ToLower().Contains(filter.Name.ToLower()));
+            }
+            if (filter.GenresId != null)
+            {
+                items = items.Where(x => filter.GenresId.Contains(x.ShoppingItemGenreId));
+            }
+            if (filter.MinPrice != null)
+            {
+                items = items.Where(x => x.Price >= filter.MinPrice);
+            }
+            if (filter.MaxPrice != 0)
+            {
+                items = items.Where(x => x.Price <= filter.MaxPrice);
+            }
+            return _mapper.Map<List<ShoppingItemDto>>(await items.ToListAsync());
         }
     }
 }

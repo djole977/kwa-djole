@@ -141,3 +141,14 @@ function AddProductToCart(productId) {
         }
     });
 }
+function formatDateToDDMMYYYY(date) {
+    let day = date.getDate().toString().padStart(2, '0');
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let year = date.getFullYear();
+
+    // Return formatted date string
+    return `${day}.${month}.${year}`;
+}
+function formatNumber(number) {
+    return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
