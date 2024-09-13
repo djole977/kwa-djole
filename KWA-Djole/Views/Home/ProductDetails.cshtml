@@ -4,34 +4,45 @@
 </div>
 <div class="w-100 d-flex flex-row justify-content-between align-items-center">
     @await Html.PartialAsync("_ShoppingItem", Model)
-    <table id="reviewsTable" class="col-12">
-        <thead>
-            <tr>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody class="col-12">
-            @foreach (var review in Model.CustomerReviews)
-            {
-                <tr class="col-12 d-flex justify-content-center">
-                    <td class="d-flex flex-column">
-                        <div class="d-flex justify-content-center">
-                            <img src="~/images/CircleProfilePicture.png" style="height: 50px" class="mb-2">
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            @for (int i = 1; i < 6; i++)
-                            {
-                                <span class="fa fa-star @(review.Rating >= i ? "checked" : "")"></span>
-                            }
-                        </div>
-                        <div class="d-flex justify-content-center mb-4 mt-2">
-                            <i class="fas fa-quote-left mr-2"></i><h2 style="font-size: 20px">@review.Comment</h2><i class="fas fa-quote-right ml-2"></i>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card col-6">
+        <div class="card-body d-flex justify-content-center">
+            <table id="reviewsTable" class="col-12 table">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="col-12">
+                    @foreach (var review in Model.CustomerReviews)
+                    {
+                        <tr class="col-12 d-flex justify-content-center">
+                            <td class="d-flex flex-column">
+                                <div class="d-flex justify-content-center">
+                                    <img src="~/images/CircleProfilePicture.png" style="height: 50px" class="mb-2">
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    @for (int i = 1; i < 6; i++)
+                                    {
+                                        <span class="fas fa-star" style="color: @(review.Rating >= i ? "#ff9c1a" : "")"></span>
+                                    }
+                                </div>
+                                <div class="d-flex justify-content-center mb-4 mt-2">
+                                    @if (string.IsNullOrEmpty(review.Comment))
+                                    {
+                                        <h6>Nema komentara</h6>
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-quote-left mr-2"></i><h2 style="font-size: 20px">@review.Comment</h2><i class="fas fa-quote-right ml-2"></i>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 @section Scripts{
     <script type="text/javascript">

@@ -16,11 +16,12 @@ namespace KWA_Djole.Business.Interfaces
         Task<List<ShoppingItemDto>> GetCustomerCart(string user);
         Task<int> GetCustomerCartCount(string user);
         Task<bool> AddShoppingItemToCart(string user, int itemId);
-        Task<bool> RemoveShoppingItemFromCart(string user, int itemId);
+        Task<bool> RemoveShoppingItemFromCart(string user, int itemId, bool removeAllOfSameType = false);
         Task<List<ShoppingItemGenreDto>> GetAllGenres();
         Task<bool> AddUserGenres(string user, List<int> genreIds);
         Task<bool> AddProductToCart(string user, int productId);
         Task<bool> OrderItems(string user);
         Task<List<OrderDto>> GetCustomerOrders(string user);
+        Task<bool> RateOrderItem(string user, int orderItemId, int rating, string comment);
     }
 }

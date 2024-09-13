@@ -69,12 +69,12 @@ namespace KWA_Djole.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveItemFromCart(int id)
+        public async Task<IActionResult> RemoveItemFromCart(int id, bool removeAllOfSameType = false)
         {
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-                await _shoppingService.RemoveShoppingItemFromCart(user.Id, id);
+                await _shoppingService.RemoveShoppingItemFromCart(user.Id, id, removeAllOfSameType);
                 return Json(new { success = true, message = "Proizvod je uspešno obrisan iz korpe." });
             }
             catch (Exception ex)
@@ -103,6 +103,20 @@ namespace KWA_Djole.Controllers
             var user = await _userManager.GetUserAsync(User);
             var orders = await _shoppingService.GetCustomerOrders(user.Id);
             return View(orders);
+        }
+        [HttpPost]
+        public async Task<IActionResult> RateOrderItem(int orderItemId, int rating, string comment)
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _shoppingService.RateOrderItem(user.Id, orderItemId, rating, comment);
+                return Json(new { success = result, message = result ? "Uspešno ste ocenili proizvod." : "Greška prilikom ocenjivanja proizvoda." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

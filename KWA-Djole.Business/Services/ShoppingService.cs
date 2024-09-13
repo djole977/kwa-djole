@@ -32,7 +32,7 @@ namespace KWA_Djole.Business.Services
         }
         public async Task<ShoppingItemDto> GetShoppingItem(int id)
         {
-            return _mapper.Map<ShoppingItemDto>(await _db.ShoppingItems.Include(x => x.ShoppingItemGenre).FirstOrDefaultAsync(x => x.Id == id));
+            return _mapper.Map<ShoppingItemDto>(await _db.ShoppingItems.Include(x => x.ShoppingItemGenre).Include(x => x.CustomerReviews).FirstOrDefaultAsync(x => x.Id == id));
         }
         public async Task<List<ShoppingItemDto>> GetShoppingItems()
         {
@@ -98,10 +98,17 @@ namespace KWA_Djole.Business.Services
                 return false;
             }
         }
-        public async Task<bool> RemoveShoppingItemFromCart(string user, int itemId)
+        public async Task<bool> RemoveShoppingItemFromCart(string user, int itemId, bool removeAllOfSameType = false)
         {
             try
             {
+                if (removeAllOfSameType)
+                {
+                    var items = await _db.CustomerCarts.Where(x => x.UserId == user && x.ItemId == itemId).ToListAsync();
+                    _db.CustomerCarts.RemoveRange(items);
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
                 var item = await _db.CustomerCarts.FirstOrDefaultAsync(x => x.UserId == user && x.ItemId == itemId);
                 _db.CustomerCarts.Remove(item);
                 await _db.SaveChangesAsync();
@@ -141,6 +148,29 @@ namespace KWA_Djole.Business.Services
         public async Task<List<OrderDto>> GetCustomerOrders(string user)
         {
             return _mapper.Map<List<OrderDto>>(await _db.Orders.Include(x => x.Items).ThenInclude(x => x.ShoppingItem).Where(x => x.UserId == user).ToListAsync());
+        }
+        public async Task<bool> RateOrderItem(string user, int orderItemId, int rating, string comment)
+        {
+            try
+            {
+                var orderItem = await _db.OrderItems.Include(x => x.ShoppingItem).FirstOrDefaultAsync(x => x.Id == orderItemId);
+                orderItem.IsRatedByCustomer = true;
+                CustomerReview review = new CustomerReview
+                {
+                    UserId = user,
+                    OrderItemId = orderItemId,
+                    Rating = rating,
+                    Comment = comment,
+                    ShoppingItem = orderItem.ShoppingItem
+                };
+                _db.CustomerReviews.Add(review);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

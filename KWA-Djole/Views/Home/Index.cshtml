@@ -18,7 +18,7 @@ else
 {
     <div class="display-4">Dobrodošli</div>
 }
-<div class="col-12 d-flex flex-row gap-4" id="comicsDiv">
+<div class="col-12 d-flex flex-row gap-4 mt-2" id="comicsDiv">
     @foreach (var item in Model.ShoppingItems)
     {
         @await Html.PartialAsync("_ShoppingItem", item)
@@ -29,23 +29,6 @@ else
     <script type="text/javascript">
         function GoToProductDetails(id) {
             window.location.href = "/Home/ProductDetails/" + id;
-        }
-        function AddProductToCart(productId) {
-            $.ajax({
-                url: "/User/AddProductToCart",
-                type: "POST",
-                data: { productId: productId },
-                success: function (data) {
-                    if (data.success) {
-                        localStorage.setItem('success', 'true')
-                        localStorage.setItem('message', 'Proizvod je dodat u korpu')
-                        window.location.reload();
-                    }
-                    else {
-                        ErrorToast('Greška', data.message);
-                    }
-                }
-            });
         }
     </script>
 }

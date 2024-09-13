@@ -11,7 +11,7 @@ else
 {
     @foreach (var order in Model)
     {
-        var groupedItems = order.Items
+        @* var groupedItems = order.Items
         .GroupBy(i => new { i.ShoppingItem.Id, i.ShoppingItem.Name, i.ShoppingItem.Price, i.Status, i.IsRatedByCustomer })
         .Select(g => new
         {
@@ -23,7 +23,7 @@ else
             Status = g.Key.Status,
             IsRatedByCustomer = g.Key.IsRatedByCustomer
         })
-        .ToList();
+        .ToList(); *@
         <div class="card col-md-6">
             <div class="card-body">
                 <h4>Datum porudžbine - @order.Date.ToString("dd.MM.yyyy u HH:mm") sati</h4>
@@ -31,22 +31,20 @@ else
                     <thead>
                         <tr>
                             <th>Ime stavke</th>
-                            <th>Količina</th>
-                            <th>Ukupno</th>
+                            <th>Cena</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in groupedItems)
+                        @foreach (var item in order.Items)
                         {
                             <tr>
-                                <td>@item.Name</td>
-                                <td>@item.Quantity</td>
-                                <td>@item.TotalPrice.ToString("N", CultureInfo.InvariantCulture) RSD</td>
+                                <td>@item.ShoppingItem.Name</td>
+                                <td>@item.ShoppingItem.Price.ToString("N", CultureInfo.InvariantCulture) RSD</td>
                                 <td>
                                     @if (item.Status == KWA_Djole.Data.Enums.OrderStatus.Pristiglo)
                                     {
-                                        <span class="badge bg-success">Pristiglo</span>
+                                        <span class="badge bg-success">Pristiglo @(item.IsRatedByCustomer ? "i ocenjeno" : "")</span>
                                     }
                                     else if (item.Status == KWA_Djole.Data.Enums.OrderStatus.U_toku)
                                     {
@@ -54,7 +52,7 @@ else
                                     }
                                     else if (item.Status == KWA_Djole.Data.Enums.OrderStatus.Otkazano)
                                     {
-                                        <span class="badge bg-warning">Otkazano</span>
+                                        <span class="badge bg-danger">Otkazano</span>
                                     }
                                     else
                                     {
@@ -99,15 +97,41 @@ else
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zatvori</button>
-                <button type="button" class="btn btn-primary">Postavi</button>
+                <button type="button" class="btn btn-primary" onclick="SubmitReview()">Postavi</button>
             </div>
         </div>
     </div>
 </div>
+<input type="hidden" id="selectedItemId" />
 @section Scripts{
     <script type="text/javascript">
         function ShowRateModal(itemId) {
             $('#exampleModal').modal('show');
+            $('#selectedItemId').val(itemId);
+        }
+        function SubmitReview() {
+            var itemId = $('#selectedItemId').val();
+            var rating = $('input[name="rating"]:checked').val();
+            if(rating === undefined){
+                ErrorToast('Pažnja', 'Morate odabrati ocenu');
+                return
+            }
+            var comment = $('textarea').val();
+            $.ajax({
+                url: '/User/RateOrderItem',
+                type: 'POST',
+                data: { orderItemId: itemId, rating: rating, comment: comment },
+                success: function (data) {
+                    if (data.success === true) {
+                        localStorage.setItem('success', 'true');
+                        localStorage.setItem('message', 'Ocena je postavljena');
+                        window.location.reload();
+                    }
+                    else {
+                        ErrorToast('Greška', data.message);
+                    }
+                }
+            });
         }
     </script>
 }

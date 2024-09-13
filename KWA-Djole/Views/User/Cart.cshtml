@@ -24,7 +24,7 @@ else
 {
     <div class="card col-md-8">
         <div class="card-body">
-            <table class="table table-striped">
+            <table class="table table-striped" id="cartTable">
                 <thead>
                     <tr>
                         <th>Proizvod</th>
@@ -41,11 +41,11 @@ else
                             <td>@item.Name</td>
                             <td>@item.Price.ToString("N", CultureInfo.InvariantCulture) RSD</td>
                             <td>
-                                <a class="mr-2 text-black" href="#" onclick="RemoveItemFromCart(@item.Id)">- </a> @item.Quantity <a class="ml-2 text-black" href="#" onclick="AddProductToCart(@item.Id)"> +</a>
+                                <a class="mr-2 text-black" href="#" onclick="RemoveItemFromCart(@item.Id, false)">- </a> @item.Quantity <a class="ml-2 text-black" href="#" onclick="AddProductToCart(@item.Id)"> +</a>
                             </td>
                             <td>@item.TotalPrice.ToString("N", CultureInfo.InvariantCulture) RSD</td>
                             <td>
-                                <a href="#" class="fas fa-trash text-black" onclick="RemoveItemFromCart(@item.Id)"></a>
+                                <a href="#" class="fas fa-trash text-black" onclick="RemoveItemFromCart(@item.Id, true)"></a>
                             </td>
                         </tr>
                     }
@@ -59,11 +59,11 @@ else
 }
 @section Scripts{
     <script type="text/javascript">
-        function RemoveItemFromCart(itemId) {
+        function RemoveItemFromCart(itemId, removeAllOfSameType) {
             $.ajax({
                 url: '/User/RemoveItemFromCart',
                 type: 'POST',
-                data: { id: itemId },
+                data: { id: itemId, removeAllOfSameType: removeAllOfSameType },
                 success: function (data) {
                     if (data.success === true) {
                         localStorage.setItem('success', 'true')

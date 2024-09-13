@@ -10,8 +10,10 @@ namespace KWA_Djole.Business.Dtos
     public class CustomerReviewDto : BaseDto
     {
         public string? UserId { get; set; }
-        public OrderItem Item { get; set; }
-        public int ItemId { get; set; }
+        public OrderItem OrderItem { get; set; }
+        public ShoppingItemDto? ShoppingItem { get; set; }
+        public int? ShoppingItemId { get; set; }
+        public int OrderItemId { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }
     }

@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="~/lib/adminlte/css/adminlte.min.css" />
     <link rel="stylesheet" href="~/lib/jquery-confirm/jquery-confirm.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.min.css" />
     <link rel="stylesheet" href="~/lib/toastr/css/toastr.min.css" />
     <link rel="stylesheet" href="~/lib/fullcalendar/css/main.css" />
     <link rel="stylesheet" href="~/lib/daterangepicker/css/daterangepicker.css" />
@@ -39,8 +39,8 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="@(isAuth ? "/User/Cart" : "#")">
-                        <i class="fas fa-cart-shopping"></i>
+                    <a class="nav-link" href="@(isAuth ? "/User/Cart" : "/Home/Login")">
+                        <i class="fas fa-cart-shopping" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@(User.Identity.IsAuthenticated ? "Moja korpa" : "Prijavi se")"></i>
                         @if(cartItems > 0)
                         {
                             <span class='badge badge-warning' id='lblCartCount'> @cartItems </span>
@@ -141,7 +141,7 @@
     <script src="https://kit.fontawesome.com/9c82e85201.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
     <script src="~/lib/moment/moment.js"></script>
-    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/toastr/js/toastr.min.js"></script>
     <script src="~/lib/adminlte/js/adminlte.min.js"></script>

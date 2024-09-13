@@ -17,10 +17,10 @@
         
         @if (Model.IsDetailsPage)
         {
-            <div class="d-flex flex-row justify-content-end align-items-center w-100 mt-3">
+            <div class="d-flex flex-row justify-content-end align-items-center w-100 mt-3 position-absolute" style="bottom: 15px;">
                 <div class="d-flex flex-row align-items-center">
                     <h5 class="card-text mb-0 mr-3">@Model.Price.ToString("N", CultureInfo.InvariantCulture) RSD</h5>
-                    <button class="btn btn-success" onclick="@(User.Identity.IsAuthenticated ? "AddItemToCart(" + Model.Id + ")" : "GoToLogin()")">
+                    <button class="btn @(User.Identity.IsAuthenticated ? "btn-success" : "btn-secondary")" onclick="@(User.Identity.IsAuthenticated ? "AddProductToCart(" + Model.Id + ")" : "GoToLogin()")">
                         <i class="fas fa-cart-shopping"></i>
                     </button>
                 </div>
@@ -32,7 +32,7 @@
                 <button class="btn btn-primary" onclick="GoToProductDetails(@Model.Id)">Detalji</button>
                 <div class="d-flex flex-row align-items-center">
                     <h5 class="card-text mb-0 mr-3">@Model.Price.ToString("N", CultureInfo.InvariantCulture) RSD</h5>
-                    <button class="btn btn-success" onclick="@(User.Identity.IsAuthenticated ? "AddProductToCart(" + Model.Id + ")" : "GoToLogin()")">
+                    <button data-bs-toggle="tooltip" data-bs-placement="top" title="@(User.Identity.IsAuthenticated ? "Dodaj u korpu" : "Prijavi se")" class="btn @(User.Identity.IsAuthenticated ? "btn-success" : "btn-secondary")" onclick="@(User.Identity.IsAuthenticated ? "AddProductToCart(" + Model.Id + ")" : "GoToLogin()")">
                         <i class="fas fa-cart-shopping"></i>
                     </button>
                 </div>

@@ -123,3 +123,21 @@ function Logout() {
         }
     })
 }
+
+function AddProductToCart(productId) {
+    $.ajax({
+        url: "/User/AddProductToCart",
+        type: "POST",
+        data: { productId: productId },
+        success: function (data) {
+            if (data.success) {
+                localStorage.setItem('success', 'true')
+                localStorage.setItem('message', 'Proizvod je dodat u korpu')
+                window.location.reload();
+            }
+            else {
+                ErrorToast('Greška', data.message);
+            }
+        }
+    });
+}
