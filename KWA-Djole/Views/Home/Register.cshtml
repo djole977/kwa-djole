@@ -76,7 +76,7 @@
                 </div>
                 <div>
                     <div class="input-group mb-3">
-                        <input name="Password" type="password" class="form-control" placeholder="Šifra*" required>
+                        <input name="Password" type="password" class="form-control" placeholder="Šifra*" required minLength="8">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -114,8 +114,7 @@
                     error.appendTo(element.parent().parent())
                 }
             })
-            $('.select2-search__field').css('width', '100%');
-            //$('#registerForm').preventDefault()
+            $('.select2-search__field').css('width', '250px');
             $('#genreSelect').select2({
                 allowClear: true,
                 theme: 'classic',

@@ -87,7 +87,7 @@ namespace KWA_Djole.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { success = false });
+                return Json(new { success = false, message = "Unesite sve potrebne podatke." });
             }
             var user = new User
             {
@@ -103,14 +103,14 @@ namespace KWA_Djole.Controllers
             {
                 TempData["Success"] = "False";
                 TempData["Message"] = "Greška prilikom registracije";
-                return Json(new { success = false });
+                return Json(new { success = false, messages = "Šifra mora sadržati makar 8 karaktera, jedno veliko i malo slovo kao i poseban karakter." });
             }
             if (model.SelectedGenres != null)
             {
                 var genres = model.SelectedGenres.Select(x => x.Id).ToList();
                 await _shoppingService.AddUserGenres(user.Id, genres);
             }
-            return RedirectToAction("Index", "Home");
+            return Json(new { success = true });
         }
 
         [HttpGet]

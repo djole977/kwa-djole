@@ -28,9 +28,9 @@ else
     <div class="card-body">
         <div class="d-flex flex-column align-items-center">
             <div class="d-flex flex-row align-items-center col-12">
-                <h5>Ime: </h5>
+                <h5 class="mb-0">Ime: </h5>
                 <input type="text" class="form-control col-2 ml-2" id="nameFilter" />
-                <h5 class="ml-4">Žanrovi: </h5>
+                <h5 class="ml-4 mb-0">Žanrovi: </h5>
                 <div class="col-2">
                     <select id="genreSelect" class="form-select js-example-placeholder-multiple js-states form-control ml-4" style="width: 100%" multiple>
                         <option></option>
@@ -41,19 +41,24 @@ else
                     </select>
                 </div>
                 @* <h5 class="ml-4">Opseg cene: </h5> *@
-                <div class="col-3 ml-4">
-                    <input type="text" class="js-range-slider" name="my_range" value="" style="width: 100%" />
+                <div style="width: 550px; margin-left: 60px">
+                    <input type="text" class="js-range-slider" id="priceSlider" name="my_range" value="" />
+                </div>
+            </div>
+            <div class="d-flex flex-row col-12 align-items-center">
+                <h5 class="mb-0">Broj stranica: </h5>
+                <div style="width: 150px; margin-left: 60px">
+                    <input type="text" class="js-range-slider" id="pagesSlider" name="my_range" value="" />
                 </div>
             </div>
             <div class="col-12 d-flex flex-row mt-4 gap-4">
                 <button class="btn btn-primary" onclick="GetItemsFiltered('@User.Identity.IsAuthenticated')">Primeni</button>
                 <button class="btn btn-secondary" onclick="ClearFilters()">Poništi</button>
             </div>
-            
         </div>
     </div>
 </div>
-<div class="col-12 d-flex flex-row gap-4 mt-2" id="comicsDiv">
+<div class="col-12 d-flex justify-content-between flex-row flex-wrap gap-4 mt-2" id="comicsDiv">
     @foreach (var item in Model.ShoppingItems)
     {
         @await Html.PartialAsync("_ShoppingItem", item)
@@ -69,7 +74,7 @@ else
                 theme: 'classic'
             });
             $('.select2-search__field').css('width', '100%');
-            $(".js-range-slider").ionRangeSlider({
+            $("#priceSlider").ionRangeSlider({
                 type: "double",
                 min: 0,
                 max: 10000,
@@ -79,6 +84,16 @@ else
                 postfix: " RSD",
                 skin: 'round'
             });
+            $("#pagesSlider").ionRangeSlider({
+                type: "double",
+                min: 0,
+                max: 1000,
+                from: 0,
+                to: 1000,
+                grid: true,
+                postfix: " strana",
+                skin: 'round'
+            });
         });
         function GoToProductDetails(id) {
             window.location.href = "/Home/ProductDetails/" + id;
@@ -86,13 +101,13 @@ else
         function GetItemsFiltered(isAuthenticated) {
             var cartText = '';
             var cartClass = '';
-            if (isAuthenticated) {
+            if (isAuthenticated === 'True') {
                 cartText = 'Dodaj u korpu';
             }
             else {
                 cartText = 'Prijavi se';
             }
-            if (isAuthenticated) { 
+            if (isAuthenticated === 'True') { 
                 cartClass = 'btn-success';
             }
             else {
@@ -108,12 +123,18 @@ else
             });
             filter.GenresId = selectedDataIds
 
-            var range = $(".js-range-slider").data("ionRangeSlider");
+            var range = $("#priceSlider").data("ionRangeSlider");
             var priceFrom = parseInt(range.old_from)
             var priceTo = range.old_to
 
+            var pageRange = $("#pagesSlider").data("ionRangeSlider");
+            var pagesFrom = parseInt(pageRange.old_from)
+            var pagesTo = pageRange.old_to
+
             filter.MinPrice = priceFrom
             filter.MaxPrice = priceTo
+            filter.MinPages = pagesFrom
+            filter.MaxPages = pagesTo
 
             $.ajax({
                 url: '/Home/GetShoppingItemsFiltered',
@@ -128,7 +149,7 @@ else
                         var jsDate = new Date(item.issueDate);
                         var issueDate = formatDateToDDMMYYYY(jsDate)
                         var price = formatNumber(item.price)
-                        if (isAuthenticated) {
+                        if (isAuthenticated === 'True') {
                             onclickAction = `AddProductToCart(${item.id})`;
                         }
                         else {
@@ -136,22 +157,23 @@ else
                         }
                         
                         var newItemHtml = `
-                        <div class="card col-3"><div class="card-body col-12 d-flex justify-content-center flex-column align-items-center pt-2" style="min-height: 600px">
-                            <div class="col-12 d-flex justify-content-center flex-column align-items-center position-absolute" style="top: 10px">
-                            <h5 style="font-size: 26px;">${item.name}</h5>
-                            <img src="${item.imageUrl}" style="width: 200px" />
-                            <h5 class="mt-2">Izdavač: ${item.issuer}</h5>
-                            <h5>Datum izdavanja: ${issueDate}</h5>
-                            <h5>Žanr: ${item.shoppingItemGenre.name}</h5>
+                        <div class="card" style="width: 300px"><div class="card-body col-12 d-flex justify-content-center flex-column align-items-center pt-0" style="min-height: 700px">
+                            <div class="col-12 d-flex justify-content-center flex-column align-items-center position-absolute" style="top: 0px">
+                            <img src="${item.imageUrl}" style="width: 300px; height: 440px" />
+                            <h5 style="font-size: 26px;" class="mt-1">${item.name}</h5>
+                            <hr class="hr w-100 mt-1 mb-1" style="color: #ebebeb" />
+                            <h6 class="mt-2">Izdavač: ${item.issuer}</h5>
+                            <h6>Datum izdavanja: ${issueDate}</h5>
+                            <h6>Žanr: ${item.shoppingItemGenre.name}</h5>
                             <div class="d-flex flex-row justify-content-center align-items-center mt-1">
                                 <i class="fas fa-book"></i>
-                                <h5 class="mb-0 ml-2">${item.numOfPages} stranica</h5>
+                                <h6 class="mb-0 ml-2">${item.numOfPages} stranica</h5>
                             </div>
                         </div>
-                            <div class="d-flex flex-row justify-content-between align-items-center w-100 position-absolute" style="bottom: 15px;">
+                            <div class="d-flex flex-row justify-content-between align-items-center w-100 position-absolute pl-2 pr-2" style="bottom: 15px;">
                                 <button class="btn btn-primary" onclick="GoToProductDetails(${item.id})">Detalji</button>
                                 <div class="d-flex flex-row align-items-center">
-                                    <h5 class="card-text mb-0 mr-3">${price} RSD</h5>
+                                    <h5 class="card-text mb-0 mr-2">${price} RSD</h5>
                                     <button data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="${cartText}"
                                         class="btn ${cartClass}"
@@ -167,6 +189,26 @@ else
                     });
                 }
             });
+            //Bootstrap code - initialize all tooltips on the page
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        }
+        function ClearFilters() {
+            $('#nameFilter').val('');
+            $('#genreSelect').val(null).trigger('change');
+            var range = $("#priceSlider").data("ionRangeSlider");
+            range.update({
+                from: 0,
+                to: 10000
+            });
+            var range2 = $("#pagesSlider").data("ionRangeSlider");
+            range2.update({
+                from: 0,
+                to: 1000
+            });
+            GetItemsFiltered('@User.Identity.IsAuthenticated');
         }
     </script>
 }

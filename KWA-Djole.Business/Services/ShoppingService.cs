@@ -196,7 +196,7 @@ namespace KWA_Djole.Business.Services
             {
                 items = items.Where(x => x.NumOfPages >= filter.MinPages);
             }
-            if (filter.MaxPages != 0)
+            if (filter.MaxPages != 0 && filter.MaxPages != null)
             {
                 items = items.Where(x => x.NumOfPages <= filter.MaxPages);
             }
