@@ -18,7 +18,7 @@ else
 {
     <div class="display-4">Dobrodošli</div>
 }
-<div class="card col-12 collapsed-card">
+<div class="card col-12 collapsed-card mt-2">
     <div class="card-header">
         <h3 class="card-title">Filteri</h3>
         <div class="card-tools">
@@ -32,7 +32,7 @@ else
                 <input type="text" class="form-control col-2 ml-2" id="nameFilter" />
                 <h5 class="ml-4">Žanrovi: </h5>
                 <div class="col-2">
-                    <select id="genreSelect" class="form-select js-example-placeholder-multiple js-states form-control ml-2" style="width: 100%" multiple>
+                    <select id="genreSelect" class="form-select js-example-placeholder-multiple js-states form-control ml-4" style="width: 100%" multiple>
                         <option></option>
                         @foreach (var item in Model.Genres)
                         {
@@ -40,9 +40,14 @@ else
                         }
                     </select>
                 </div>
+                @* <h5 class="ml-4">Opseg cene: </h5> *@
+                <div class="col-3 ml-4">
+                    <input type="text" class="js-range-slider" name="my_range" value="" style="width: 100%" />
+                </div>
             </div>
-            <div class="col-12">
-                <button class="btn btn-primary mt-4" onclick="GetItemsFiltered('@User.Identity.IsAuthenticated')">Primeni</button>
+            <div class="col-12 d-flex flex-row mt-4 gap-4">
+                <button class="btn btn-primary" onclick="GetItemsFiltered('@User.Identity.IsAuthenticated')">Primeni</button>
+                <button class="btn btn-secondary" onclick="ClearFilters()">Poništi</button>
             </div>
             
         </div>
@@ -64,6 +69,16 @@ else
                 theme: 'classic'
             });
             $('.select2-search__field').css('width', '100%');
+            $(".js-range-slider").ionRangeSlider({
+                type: "double",
+                min: 0,
+                max: 10000,
+                from: 0,
+                to: 10000,
+                grid: true,
+                postfix: " RSD",
+                skin: 'round'
+            });
         });
         function GoToProductDetails(id) {
             window.location.href = "/Home/ProductDetails/" + id;
@@ -71,7 +86,6 @@ else
         function GetItemsFiltered(isAuthenticated) {
             var cartText = '';
             var cartClass = '';
-            console.log(isAuthenticated)
             if (isAuthenticated) {
                 cartText = 'Dodaj u korpu';
             }
@@ -93,6 +107,14 @@ else
                 selectedDataIds.push(dataId);
             });
             filter.GenresId = selectedDataIds
+
+            var range = $(".js-range-slider").data("ionRangeSlider");
+            var priceFrom = parseInt(range.old_from)
+            var priceTo = range.old_to
+
+            filter.MinPrice = priceFrom
+            filter.MaxPrice = priceTo
+
             $.ajax({
                 url: '/Home/GetShoppingItemsFiltered',
                 type: 'POST',

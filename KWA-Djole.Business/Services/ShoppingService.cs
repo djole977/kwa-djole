@@ -192,6 +192,14 @@ namespace KWA_Djole.Business.Services
             {
                 items = items.Where(x => x.Price <= filter.MaxPrice);
             }
+            if (filter.MinPages != null)
+            {
+                items = items.Where(x => x.NumOfPages >= filter.MinPages);
+            }
+            if (filter.MaxPages != 0)
+            {
+                items = items.Where(x => x.NumOfPages <= filter.MaxPages);
+            }
             return _mapper.Map<List<ShoppingItemDto>>(await items.ToListAsync());
         }
     }
