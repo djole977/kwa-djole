@@ -8,19 +8,23 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Uloguj se u aplikaciju</p>
                 <form id="loginForm" asp-action="Authenticate" asp-controller="Home" method="post">
-                    <div class="input-group mb-3">
-                        <input name="Email" type="email" class="form-control" placeholder="Email" required>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                    <div>
+                        <div class="input-group mb-3">
+                            <input name="Email" type="email" class="form-control" placeholder="Email" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
-                        <input name="Password" type="password" class="form-control" placeholder="Šifra" required>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                    <div>
+                        <div class="input-group mb-3">
+                            <input id="passwordInput" name="Password" type="password" class="form-control" placeholder="Šifra" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -40,7 +44,33 @@
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#loginForm').validate()
+            $('#loginForm').validate({
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent().parent())
+                }
+            })
+            $('#loginForm').submit(function(event) {
+                event.preventDefault()
+                if ($('#loginForm').valid()) {
+                    $.ajax({
+                        url: '/Home/Authenticate',
+                        type: 'POST',
+                        data: $('#loginForm').serialize(),
+                        success: function(data) {
+                            if (data.success === true) {
+                                localStorage.setItem('success', 'true')
+                                localStorage.setItem('message', 'Uspešno ste se ulogovali')
+                                window.location.href = '/Home/Index'
+                            }
+                            else {
+                                ErrorToast(undefined, data.message)
+                                $('#passwordInput').val('')
+                            }
+                        }
+                    })
+                }
+                return false
+            })
         })
     </script>
 }

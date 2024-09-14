@@ -41,8 +41,15 @@ body {
 .error {
     color: red;
     display: block;
-    margin-top: 5px;
 }
+input.error {
+    border: 1px solid red;
+}
+label.error {
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
 .rating {
     margin-bottom: 20px;
     display: flex;

@@ -58,20 +58,17 @@ namespace KWA_Djole.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                TempData["Success"] = "False";
-                TempData["Message"] = "Korisnik ne postoji";
+                return Json(new { success = false, message = "Korisnik ne postoji" });
             }
             else
             {
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
                 if (!result.Succeeded)
                 {
-                    TempData["Success"] = "False";
-                    TempData["Message"] = "Pogrešna šifra, pokušajte ponovo";
-                    return Json(new { });
+                    return Json(new { success = false, message = "Pogrešna šifra, pokušajte ponovo" });
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return Json(new { success = true });
         }
 
         [HttpGet]
@@ -103,7 +100,7 @@ namespace KWA_Djole.Controllers
             {
                 TempData["Success"] = "False";
                 TempData["Message"] = "Greška prilikom registracije";
-                return Json(new { success = false, messages = "Šifra mora sadržati makar 8 karaktera, jedno veliko i malo slovo kao i poseban karakter." });
+                return Json(new { success = false, message = "Šifra mora sadržati makar 8 karaktera, jedno veliko i malo slovo kao i poseban karakter." });
             }
             if (model.SelectedGenres != null)
             {

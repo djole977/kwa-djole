@@ -114,7 +114,10 @@
                     error.appendTo(element.parent().parent())
                 }
             })
-            $('.select2-search__field').css('width', '250px');
+            setTimeout(function () {
+                $('.select2-search__field').css('width', '150px');
+            }, 100)
+            
             $('#genreSelect').select2({
                 allowClear: true,
                 theme: 'classic',
@@ -132,13 +135,11 @@
                     data: data,
                     success: function(response) {
                         if (response.success === true) {
-                            AlertSuccess(undefined, 'Uspešna registracija', function () { window.location.href = '/Home/Login' })
+                            localStorage.setItem('success', 'true')
+                            localStorage.setItem('message', 'Uspešna registracija, možete se ulogovati')
+                            window.location.href = '/Home/Login';
                         } else {
-                            $.alert({
-                                title: 'Greška',
-                                content: response.message,
-                                type: 'red'
-                            })
+                            ErrorToast(undefined, response.message)
                         }
                     }
                 })

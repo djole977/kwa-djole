@@ -20,7 +20,7 @@ else
 }
 <div class="card col-12 collapsed-card mt-2">
     <div class="card-header">
-        <h3 class="card-title">Filteri</h3>
+        <h3 class="card-title">Pretraga</h3>
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
         </div>
@@ -58,7 +58,7 @@ else
         </div>
     </div>
 </div>
-<div class="col-12 d-flex justify-content-between flex-row flex-wrap gap-4 mt-2" id="comicsDiv">
+<div class="col-12 d-flex justify-content-start flex-row flex-wrap mt-2" style="column-gap: 20px; row-gap: 20px" id="comicsDiv">
     @foreach (var item in Model.ShoppingItems)
     {
         @await Html.PartialAsync("_ShoppingItem", item)
